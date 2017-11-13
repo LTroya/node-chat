@@ -9,5 +9,22 @@ socket.on('disconnect', () => {
 });
 
 socket.on('newMessage', (message) => {
-    console.log('New message', message);
+    const li = $("<li></li>");
+    li.text(`${message.from}: ${message.text}`);
+
+    $('#messages').append(li);
+});
+
+
+$('#message-form').on('submit', e => {
+    e.preventDefault();
+
+    const input = $('[name="message"]');
+    socket.emit('createMessage', {
+        from: 'Frank',
+        text: input.val()
+    }, (data) => {
+        console.log('Got it', data);
+        input.val('');
+    });
 });
